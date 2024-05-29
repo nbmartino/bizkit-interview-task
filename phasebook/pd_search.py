@@ -4,6 +4,7 @@ import json as json
 
 from .data.search_data import USERS
 
+
 def pd_search_users(args, data):
 
     df = pd.DataFrame(data)
@@ -12,24 +13,25 @@ def pd_search_users(args, data):
     
     # compose our filter
     for criteria in args:
+        args_criteria = args[criteria]
         if(len(query_param)):
             query_param += " | "
         if criteria == 'id':
-            query_param += '( id.str.match("%s") )' % (args[criteria])
+            query_param += '( id.str.match("%s") )' % (args_criteria)
         if criteria == 'age':
-            age = args[criteria]
-            #query_param += '( age >= %d & age <= %d )' % (age - 1, age + 1)
-            query_param += '( %d <= age < %d)'  % (age - 1, age + 1)
+            age = int(args_criteria)
+            query_param += '( age.between(%d,%d) )'  % (age - 1, age + 1)
         if criteria == 'name':
-            query_param += '( name.str.contains("%s") )' % (args[criteria])
+            query_param += '( name.str.contains("%s") )' % (args_criteria)
         if criteria == 'occupation':
-            query_param += '( occupation.str.contains("%s") )' % (args[criteria])
+            query_param += '( occupation.str.contains("%s") )' % (args_criteria)
 
     if (len(query_param)):
         sdf = df.loc[df.query(query_param, engine='python').index]
         return sdf.to_dict(orient='records')
     else:
         return df.to_dict(orient='records')
+
 
 def pd_sorted_search_users(args, data):
     
@@ -60,7 +62,4 @@ def pd_sorted_search_users(args, data):
         return result
     else:
         return df.to_dict(orient='records')
-
-
-#print(pd_search_users({"id":"2","name":"John"}, USERS))
-#print(pd_search_users_sort({"id":"5", "name": "Joe", "age": 30, "occupation":"Arc"}, USERS))
+    

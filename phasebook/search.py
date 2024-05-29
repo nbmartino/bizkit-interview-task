@@ -16,25 +16,8 @@ def search():
 def sorted_search():
     return sorted_search_users(request.args.to_dict()), 200
 
-def search_users(args):
-    """Search users database
-
-    Parameters:
-        args: a dictionary containing the following search parameters:
-            id: string
-            name: string
-            age: string
-            occupation: string
-
-    Returns:
-        a list of users that match the search parameters
-    """
-
-    # Implement search here!
-
-    
+def search_users(args):    
     return pd_search_users(args,USERS)
-
 
 def sorted_search_users(args):
     return pd_sorted_search_users(args, USERS)
