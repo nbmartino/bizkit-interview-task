@@ -20,8 +20,9 @@ def match(match_id):
 
 
 def is_match(fave_numbers_1, fave_numbers_2):
+    res_dct = dict.fromkeys(fave_numbers_1, True)
     for number in fave_numbers_2:
-        if number not in fave_numbers_1:
+        if res_dct.get(number) is None:
             return False
-
-    return True
+    return True    
+ 
